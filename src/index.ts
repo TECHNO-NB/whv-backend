@@ -7,21 +7,21 @@ config();
 
 const port: number | string = process.env.PORT || 8000;
 
-console.log("database",process.env.DATABASE_URL)
+console.log("database")
 // cluster
-if (cluster.isPrimary) {
-  const totalCpu = os.cpus().length;
-  console.log(`Primary ${process.pid} running, forking ${totalCpu} workers...`);
-  for (let i = 0; i < totalCpu; i++) {
-    cluster.fork();
-  }
+// if (cluster.isPrimary) {
+//   const totalCpu = os.cpus().length;
+//   console.log(`Primary ${process.pid} running, forking ${totalCpu} workers...`);
+//   for (let i = 0; i < totalCpu; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on('exit', (worker) => {
-    console.error(`Worker ${worker.process.pid} died. Restarting...`);
-    cluster.fork();
-  });
-} else {
+//   cluster.on('exit', (worker) => {
+//     console.error(`Worker ${worker.process.pid} died. Restarting...`);
+//     cluster.fork();
+//   });
+// } else {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
-}
+// }
