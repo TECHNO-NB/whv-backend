@@ -4,6 +4,7 @@ import {
   getAllGalleryAndHighlightsControllers,
   getAllNewsAndEventsControllers,
   getAllTempleController,
+  getAllVlogsController,
   getTempleByIdController,
   loginUserControllers,
   logoutUserControllers,
@@ -25,6 +26,7 @@ router.route('/getall-newsandevents').get(getAllNewsAndEventsControllers);
 router.route('/verify-user').get(jwtVerify, verifyUserControllers);
 router.route('/get-all-temple').get(getAllTempleController);
 router.route('/temple-details/:id').get(getTempleByIdController);
+router.route('/get-all-vlog').get(getAllVlogsController);
 router.route('/membership').post(upload.single('photo'), createMembershipControllers);
 
 export default router;

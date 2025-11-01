@@ -293,6 +293,21 @@ const verifyUserControllers = asyncHandler(async (req: Request, res: Response): 
     .json(new ApiResponse(true, 201, 'User verify successfully', findUser));
 });
 
+
+// get all vlog
+const getAllVlogsController = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const vlogs = await prisma.vlog.findMany({
+      where: { isPublished: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res
+      .status(200)
+      .json(new ApiResponse(true, 200, "Fetched all vlogs successfully", vlogs));
+  }
+);
+
 export {
   logoutUserControllers,
   registerUserControllers,
@@ -304,4 +319,5 @@ export {
   getAllTempleController,
   getTempleByIdController,
   verifyUserControllers,
+  getAllVlogsController
 };

@@ -183,7 +183,7 @@ const createGalleryAndHighlightsController = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const imgFile = req.file?.path;
     const { types } = req.body;
-    console.log('++++++++++++types', types);
+
     if (!imgFile) {
       throw new ApiError(false, 400, 'Image is required');
     }
@@ -357,6 +357,27 @@ const deleteUserController = asyncHandler(async (req: Request, res: Response): P
   res.status(200).json(new ApiResponse(true, 200, 'User deleted successfully', null));
 });
 
+// approve user to volunter
+const approveUserToVolunterUserController = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new ApiError(false, 404, 'User not found');
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: {
+        role: 'volunteer',
+      },
+    });
+
+    res.status(200).json(new ApiResponse(true, 200, 'User updated to volunteer successfully'));
+  }
+);
+
 // get all memberships
 const getALlMemberShipsControllers = asyncHandler(
   async (req: Request, res: Response): Promise<any> => {
@@ -400,6 +421,64 @@ const deleteMemberShipsControllers = asyncHandler(
   }
 );
 
+// create vlog
+const createVlogController = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  console.log('++++++++++hit');
+  const { title, description, mediaType } = req.body;
+  const file = req.file?.path;
+
+  if (!file) {
+    throw new ApiError(false, 400, 'Media file is required');
+  }
+
+  if (!title) {
+    throw new ApiError(false, 400, 'Title is required');
+  }
+
+  // upload media to Cloudinary
+  const uploadedUrl = await uploadToCloudinary(file);
+
+  // if mediaType is video, generate a thumbnail (optional)
+  let thumbnailUrl: string | null = null;
+  if (mediaType === 'VIDEO') {
+    thumbnailUrl = uploadedUrl || null;
+  }
+
+  const vlog = await prisma.vlog.create({
+    data: {
+      title,
+      description,
+      mediaType: mediaType,
+      mediaUrl: uploadedUrl,
+      thumbnailUrl,
+      isPublished: true,
+    },
+  });
+
+  res.status(201).json(new ApiResponse(true, 201, 'Vlog created successfully', vlog));
+});
+
+// delete vlog
+const deleteVlogController = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  const vlog = await prisma.vlog.findUnique({ where: { id } });
+  if (!vlog) {
+    throw new ApiError(false, 404, 'Vlog not found');
+  }
+
+  // delete from Cloudinary (media + optional thumbnail)
+  await deleteCloudinaryImage(vlog.mediaUrl);
+  if (vlog.thumbnailUrl) {
+    await deleteCloudinaryImage(vlog.thumbnailUrl);
+  }
+
+  // delete from DB
+  await prisma.vlog.delete({ where: { id } });
+
+  res.status(200).json(new ApiResponse(true, 200, 'Vlog deleted successfully', null));
+});
+
 export {
   createTempleControllers,
   deleteTempleControllers,
@@ -415,4 +494,7 @@ export {
   deleteUserController,
   getALlMemberShipsControllers,
   deleteMemberShipsControllers,
+  createVlogController,
+  deleteVlogController,
+  approveUserToVolunterUserController
 };

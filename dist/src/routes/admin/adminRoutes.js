@@ -19,4 +19,5 @@ router
 router.route('/get-all-user').get(adminControllers_1.getAllUsersController);
 router.route('/get-all-membership').get(adminControllers_1.getALlMemberShipsControllers);
 router.route('/delete-membership/:id').delete(adminControllers_1.deleteMemberShipsControllers);
+router.route('/upload-vlog').post(adminControllers_1.createVlogController);
 exports.default = router;

@@ -68,6 +68,25 @@ model Membership {
   updatedAt      DateTime @updatedAt
 }
 
+
+
+model Vlog {
+  id           String     @id @default(uuid())
+  title        String
+  description  String?    @db.Text
+  mediaType    MediaType
+  mediaUrl     String     // Cloudinary or any CDN URL
+  thumbnailUrl String?    // only for video
+  isPublished  Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
 enum MembershipTier {
   SILVER
   GOLD

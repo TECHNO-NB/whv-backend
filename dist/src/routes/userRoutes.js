@@ -17,5 +17,6 @@ router.route('/getall-newsandevents').get(userControllers_1.getAllNewsAndEventsC
 router.route('/verify-user').get(authMiddleware_1.jwtVerify, userControllers_1.verifyUserControllers);
 router.route('/get-all-temple').get(userControllers_1.getAllTempleController);
 router.route('/temple-details/:id').get(userControllers_1.getTempleByIdController);
+router.route('/get-all-vlog').get(userControllers_1.getAllVlogsController);
 router.route('/membership').post(multerMiddleware_1.default.single('photo'), userControllers_1.createMembershipControllers);
 exports.default = router;
