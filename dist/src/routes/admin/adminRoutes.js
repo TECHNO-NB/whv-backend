@@ -17,7 +17,13 @@ router
     .route('/create-gallery-highlights')
     .post(multerMiddleware_1.default.single('imageurl'), adminControllers_1.createGalleryAndHighlightsController);
 router.route('/get-all-user').get(adminControllers_1.getAllUsersController);
+router.route("/delete-user/:id").delete(adminControllers_1.deleteUserController);
+router.route("/update-user/:id").put(adminControllers_1.updateUserController);
+router.route("/approve-user/:id").put(adminControllers_1.approveUserToVolunterUserController);
 router.route('/get-all-membership').get(adminControllers_1.getALlMemberShipsControllers);
 router.route('/delete-membership/:id').delete(adminControllers_1.deleteMemberShipsControllers);
-router.route('/upload-vlog').post(adminControllers_1.createVlogController);
+router.route('/upload-vlog').post(multerMiddleware_1.default.single('file'), adminControllers_1.createVlogController);
+router.route('/delete-vlog/:id').delete(adminControllers_1.deleteVlogController);
+router.route('/upload-ngos').post(multerMiddleware_1.default.single('image'), adminControllers_1.addNgo);
+router.route('/delete-ngos/:id').delete(adminControllers_1.deleteNgo);
 exports.default = router;

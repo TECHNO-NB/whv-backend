@@ -3,6 +3,7 @@ import {
   createMembershipControllers,
   getAllGalleryAndHighlightsControllers,
   getAllNewsAndEventsControllers,
+  getAllNgos,
   getAllTempleController,
   getAllVlogsController,
   getTempleByIdController,
@@ -28,5 +29,7 @@ router.route('/get-all-temple').get(getAllTempleController);
 router.route('/temple-details/:id').get(getTempleByIdController);
 router.route('/get-all-vlog').get(getAllVlogsController);
 router.route('/membership').post(upload.single('photo'), createMembershipControllers);
+
+router.route("/get-all-ngos").get(getAllNgos)
 
 export default router;

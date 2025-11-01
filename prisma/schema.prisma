@@ -82,6 +82,15 @@ model Vlog {
   updatedAt    DateTime   @updatedAt
 }
 
+model Ngo {
+  id          String     @id @default(uuid())
+  name        String
+  location    String
+  image       String
+  description String
+  createdAt   DateTime @default(now())
+}
+
 enum MediaType {
   IMAGE
   VIDEO

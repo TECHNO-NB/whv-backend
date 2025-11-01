@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllVlogsController = exports.verifyUserControllers = exports.getTempleByIdController = exports.getAllTempleController = exports.createMembershipControllers = exports.getAllGalleryAndHighlightsControllers = exports.getAllNewsAndEventsControllers = exports.loginUserControllers = exports.registerVolunteerControllers = exports.registerUserControllers = exports.logoutUserControllers = void 0;
+exports.getAllNgos = exports.getAllVlogsController = exports.verifyUserControllers = exports.getTempleByIdController = exports.getAllTempleController = exports.createMembershipControllers = exports.getAllGalleryAndHighlightsControllers = exports.getAllNewsAndEventsControllers = exports.loginUserControllers = exports.registerVolunteerControllers = exports.registerUserControllers = exports.logoutUserControllers = void 0;
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const apiError_1 = __importDefault(require("../utils/apiError"));
 const db_1 = __importDefault(require("../DB/db"));
@@ -284,3 +284,14 @@ const getAllVlogsController = (0, asyncHandler_1.default)((req, res) => __awaite
         .json(new apiResponse_1.default(true, 200, "Fetched all vlogs successfully", vlogs));
 }));
 exports.getAllVlogsController = getAllVlogsController;
+// ✅ Fetch NGOs
+const getAllNgos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ngos = yield db_1.default.ngo.findMany({ orderBy: { createdAt: "desc" } });
+        res.json({ success: true, data: ngos });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Failed to fetch NGOs" });
+    }
+});
+exports.getAllNgos = getAllNgos;

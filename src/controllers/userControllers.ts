@@ -308,6 +308,17 @@ const getAllVlogsController = asyncHandler(
   }
 );
 
+
+// ✅ Fetch NGOs
+const getAllNgos = async (req: Request, res: Response) => {
+  try {
+    const ngos = await prisma.ngo.findMany({ orderBy: { createdAt: "desc" } });
+    res.json({ success: true, data: ngos });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch NGOs" });
+  }
+};
+
 export {
   logoutUserControllers,
   registerUserControllers,
@@ -319,5 +330,6 @@ export {
   getAllTempleController,
   getTempleByIdController,
   verifyUserControllers,
-  getAllVlogsController
+  getAllVlogsController,
+  getAllNgos
 };

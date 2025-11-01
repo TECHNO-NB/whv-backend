@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.approveUserToVolunterUserController = exports.deleteVlogController = exports.createVlogController = exports.deleteMemberShipsControllers = exports.getALlMemberShipsControllers = exports.deleteUserController = exports.updateUserController = exports.getAllUsersController = exports.deleteGalleryAndHighlightsController = exports.updateGalleryAndHighlightsController = exports.createGalleryAndHighlightsController = exports.updateNewsAndEventsControllers = exports.deleteNewsAndEventsControllers = exports.createNewsAndEventsControllers = exports.updatetempleDetailsControllers = exports.deleteTempleControllers = exports.createTempleControllers = void 0;
+exports.deleteNgo = exports.addNgo = exports.approveUserToVolunterUserController = exports.deleteVlogController = exports.createVlogController = exports.deleteMemberShipsControllers = exports.getALlMemberShipsControllers = exports.deleteUserController = exports.updateUserController = exports.getAllUsersController = exports.deleteGalleryAndHighlightsController = exports.updateGalleryAndHighlightsController = exports.createGalleryAndHighlightsController = exports.updateNewsAndEventsControllers = exports.deleteNewsAndEventsControllers = exports.createNewsAndEventsControllers = exports.updatetempleDetailsControllers = exports.deleteTempleControllers = exports.createTempleControllers = void 0;
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const apiError_1 = __importDefault(require("../utils/apiError"));
 const cloudinary_1 = require("../utils/cloudinary");
@@ -401,3 +401,36 @@ const deleteVlogController = (0, asyncHandler_1.default)((req, res) => __awaiter
     res.status(200).json(new apiResponse_1.default(true, 200, 'Vlog deleted successfully', null));
 }));
 exports.deleteVlogController = deleteVlogController;
+// ✅ Add NGO
+const addNgo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const { name, location, description } = req.body;
+        const imagePath = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+        if (!imagePath)
+            return res.status(400).json({ success: false, message: "Image is required" });
+        // Upload to Cloudinary
+        const imageUrl = yield (0, cloudinary_1.uploadToCloudinary)(imagePath);
+        const ngo = yield db_1.default.ngo.create({
+            data: { name, location, description, image: imageUrl },
+        });
+        res.status(201).json({ success: true, data: ngo });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Failed to add NGO" });
+    }
+});
+exports.addNgo = addNgo;
+// ✅ Delete NGO
+const deleteNgo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        yield db_1.default.ngo.delete({ where: { id } });
+        res.json({ success: true, message: "NGO deleted successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Failed to delete NGO" });
+    }
+});
+exports.deleteNgo = deleteNgo;

@@ -479,6 +479,47 @@ const deleteVlogController = asyncHandler(async (req: Request, res: Response): P
   res.status(200).json(new ApiResponse(true, 200, 'Vlog deleted successfully', null));
 });
 
+
+
+
+// ✅ Add NGO
+ const addNgo = async (req: Request, res: Response) => {
+  try {
+    const { name, location, description } = req.body;
+    const imagePath = req.file?.path;
+
+    if (!imagePath) return res.status(400).json({ success: false, message: "Image is required" });
+
+    // Upload to Cloudinary
+    const imageUrl = await uploadToCloudinary(imagePath);
+   
+
+    const ngo = await prisma.ngo.create({
+      data: { name, location, description, image: imageUrl },
+    });
+
+    res.status(201).json({ success: true, data: ngo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to add NGO" });
+  }
+};
+
+
+
+// ✅ Delete NGO
+const deleteNgo = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.ngo.delete({ where: { id } });
+    res.json({ success: true, message: "NGO deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to delete NGO" });
+  }
+};
+
+
+
 export {
   createTempleControllers,
   deleteTempleControllers,
@@ -496,5 +537,7 @@ export {
   deleteMemberShipsControllers,
   createVlogController,
   deleteVlogController,
-  approveUserToVolunterUserController
+  approveUserToVolunterUserController,
+  addNgo,
+  deleteNgo
 };

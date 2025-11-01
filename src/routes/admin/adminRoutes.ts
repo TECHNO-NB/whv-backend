@@ -1,6 +1,7 @@
 import express from 'express';
 
 import {
+  addNgo,
   approveUserToVolunterUserController,
   createGalleryAndHighlightsController,
   createNewsAndEventsControllers,
@@ -8,6 +9,7 @@ import {
   createVlogController,
   deleteMemberShipsControllers,
   deleteNewsAndEventsControllers,
+  deleteNgo,
   deleteTempleControllers,
   deleteUserController,
   deleteVlogController,
@@ -43,5 +45,9 @@ router.route('/delete-membership/:id').delete(deleteMemberShipsControllers);
 
 router.route('/upload-vlog').post(upload.single('file'), createVlogController);
 router.route('/delete-vlog/:id').delete(deleteVlogController)
+
+
+router.route('/upload-ngos').post(upload.single('image'),addNgo)
+router.route('/delete-ngos/:id').delete(deleteNgo)
 
 export default router;

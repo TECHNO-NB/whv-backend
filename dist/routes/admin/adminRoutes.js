@@ -24,4 +24,6 @@ router.route('/get-all-membership').get(adminControllers_1.getALlMemberShipsCont
 router.route('/delete-membership/:id').delete(adminControllers_1.deleteMemberShipsControllers);
 router.route('/upload-vlog').post(multerMiddleware_1.default.single('file'), adminControllers_1.createVlogController);
 router.route('/delete-vlog/:id').delete(adminControllers_1.deleteVlogController);
+router.route('/upload-ngos').post(multerMiddleware_1.default.single('image'), adminControllers_1.addNgo);
+router.route('/delete-ngos/:id').delete(adminControllers_1.deleteNgo);
 exports.default = router;
