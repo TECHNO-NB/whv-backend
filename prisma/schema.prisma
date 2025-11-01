@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  fullName     String
+  phoneNumber  String   @unique
+  avatar       String?
+  address      String
+  password     String?
+  forVolunteer  Boolean   @default(false)
+  role         Role     @default(user)
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model NewsAndEvent {
+  id        String    @id @default(cuid())
+  title     String
+  eventDate DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+}
+
+model GalleryAndHighLights {
+  id        String       @id @default(cuid())
+  image     String
+  types     GalleryTypes @default(globalconferencesandsummits)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now()) @updatedAt
+}
+
+model Temple {
+  id           String   @id @default(cuid())
+  templeName   String
+  address      String
+  image        String
+  descriptions String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+
+model Membership {
+  id             String   @id @default(cuid())
+  fullName       String
+  fatherName     String?
+  occupation     String?
+  address        String?
+  contactNumber  String
+  membershipTier MembershipTier @default(SILVER)
+  photoUrl       String?  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum MembershipTier {
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+
+enum GalleryTypes {
+  globalconferencesandsummits
+  humanitarianservicemissions
+  youthandwomanempowerment
+  culturalandtemplecelebrations
+  environmentalandeducationprojects
+}
+
+enum Role {
+  user
+  admin
+  volunteer
+}
