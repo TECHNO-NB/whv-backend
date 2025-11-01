@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const userControllers_1 = require("../controllers/userControllers");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const multerMiddleware_1 = __importDefault(require("../middlewares/multerMiddleware"));
+const router = express_1.default.Router();
+router.route('/register').post(userControllers_1.registerUserControllers);
+router.route('/register-volunteer').post(multerMiddleware_1.default.single('avatar'), userControllers_1.registerVolunteerControllers);
+router.route('/login').post(userControllers_1.loginUserControllers);
+router.route('/log-out').get(authMiddleware_1.jwtVerify, userControllers_1.logoutUserControllers);
+router.route('/getall-galleryhighlights').get(userControllers_1.getAllGalleryAndHighlightsControllers);
+router.route('/getall-newsandevents').get(userControllers_1.getAllNewsAndEventsControllers);
+router.route('/verify-user').get(authMiddleware_1.jwtVerify, userControllers_1.verifyUserControllers);
+router.route('/get-all-temple').get(userControllers_1.getAllTempleController);
+router.route('/temple-details/:id').get(userControllers_1.getTempleByIdController);
+router.route('/membership').post(multerMiddleware_1.default.single('photo'), userControllers_1.createMembershipControllers);
+exports.default = router;

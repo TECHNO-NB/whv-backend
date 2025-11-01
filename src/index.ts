@@ -7,7 +7,7 @@ config();
 
 const port: number | string = process.env.PORT || 8000;
 
-console.log("database")
+console.log("database",process.env.DATABASE_URL)
 // cluster
 // if (cluster.isPrimary) {
 //   const totalCpu = os.cpus().length;
