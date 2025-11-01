@@ -21,18 +21,18 @@ app.use(
   })
 );
 
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
-  max: 50,
-  handler: (req, res, next) => {
-    console.log(`Rate limit hit`);
-    res.status(429).json({ message: 'Too many requests, slow down!' });
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// const limiter = rateLimit({
+//   windowMs: 1 * 60 * 1000,
+//   max: 50,
+//   handler: (req, res, next) => {
+//     console.log(`Rate limit hit`);
+//     res.status(429).json({ message: 'Too many requests, slow down!' });
+//   },
+//   standardHeaders: true,
+//   legacyHeaders: false,
+// });
 
-app.use(limiter);
+// app.use(limiter);
 app.use(cookieParser());
 app.use(helmet());
 app.use(compression());
