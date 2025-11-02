@@ -19,5 +19,6 @@ router.route('/get-all-temple').get(userControllers_1.getAllTempleController);
 router.route('/temple-details/:id').get(userControllers_1.getTempleByIdController);
 router.route('/get-all-vlog').get(userControllers_1.getAllVlogsController);
 router.route('/membership').post(multerMiddleware_1.default.single('photo'), userControllers_1.createMembershipControllers);
+router.route('/get-one-vlog/:id').get(userControllers_1.getOneVlogController);
 router.route("/get-all-ngos").get(userControllers_1.getAllNgos);
 exports.default = router;

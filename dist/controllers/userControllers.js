@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllNgos = exports.getAllVlogsController = exports.verifyUserControllers = exports.getTempleByIdController = exports.getAllTempleController = exports.createMembershipControllers = exports.getAllGalleryAndHighlightsControllers = exports.getAllNewsAndEventsControllers = exports.loginUserControllers = exports.registerVolunteerControllers = exports.registerUserControllers = exports.logoutUserControllers = void 0;
+exports.getAllNgos = exports.getOneVlogController = exports.getAllVlogsController = exports.verifyUserControllers = exports.getTempleByIdController = exports.getAllTempleController = exports.createMembershipControllers = exports.getAllGalleryAndHighlightsControllers = exports.getAllNewsAndEventsControllers = exports.loginUserControllers = exports.registerVolunteerControllers = exports.registerUserControllers = exports.logoutUserControllers = void 0;
 const asyncHandler_1 = __importDefault(require("../utils/asyncHandler"));
 const apiError_1 = __importDefault(require("../utils/apiError"));
 const db_1 = __importDefault(require("../DB/db"));
@@ -284,6 +284,25 @@ const getAllVlogsController = (0, asyncHandler_1.default)((req, res) => __awaite
         .json(new apiResponse_1.default(true, 200, "Fetched all vlogs successfully", vlogs));
 }));
 exports.getAllVlogsController = getAllVlogsController;
+// get one vlog
+const getOneVlogController = (0, asyncHandler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).json(new apiResponse_1.default(false, 400, "Vlog ID is required"));
+        return;
+    }
+    const vlog = yield db_1.default.vlog.findUnique({
+        where: { id },
+    });
+    if (!vlog || !vlog.isPublished) {
+        res.status(404).json(new apiResponse_1.default(false, 404, "Vlog not found"));
+        return;
+    }
+    res
+        .status(200)
+        .json(new apiResponse_1.default(true, 200, "Fetched vlog successfully", vlog));
+}));
+exports.getOneVlogController = getOneVlogController;
 // ✅ Fetch NGOs
 const getAllNgos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

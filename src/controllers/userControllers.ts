@@ -308,6 +308,31 @@ const getAllVlogsController = asyncHandler(
   }
 );
 
+// get one vlog
+const getOneVlogController = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).json(new ApiResponse(false, 400, "Vlog ID is required"));
+      return;
+    }
+
+    const vlog = await prisma.vlog.findUnique({
+      where: { id },
+    });
+
+    if (!vlog || !vlog.isPublished) {
+      res.status(404).json(new ApiResponse(false, 404, "Vlog not found"));
+      return;
+    }
+
+    res
+      .status(200)
+      .json(new ApiResponse(true, 200, "Fetched vlog successfully", vlog));
+  }
+);
+
 
 // ✅ Fetch NGOs
 const getAllNgos = async (req: Request, res: Response) => {
@@ -331,5 +356,6 @@ export {
   getTempleByIdController,
   verifyUserControllers,
   getAllVlogsController,
+  getOneVlogController,
   getAllNgos
 };
